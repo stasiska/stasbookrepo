@@ -1,0 +1,3 @@
+export const MICROSERVICES_CLIENTS = {
+    AUTH_SERVICE: "AUTH_SERVICE"
+}
