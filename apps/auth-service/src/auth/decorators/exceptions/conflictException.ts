@@ -3,18 +3,19 @@ import { RpcException } from "@nestjs/microservices";
 import { Observable, throwError } from "rxjs";
 
 @Catch(RpcException)
-export class ConflictExceptionFilter implements RpcExceptionFilter<RpcException> {
-    catch(exception: RpcException, host: ArgumentsHost): Observable<any> {
-        const errorResponse = exception.getError();
-
-        if (typeof errorResponse === 'object') {
-            return throwError(() => errorResponse);
-        }
-
-        
-
-        const formattedError = new ConflictException(errorResponse).getResponse();
-
-        return throwError(() => formattedError);
+export class GlobalExceptionFilter implements RpcExceptionFilter<RpcException> {
+  catch(exception: RpcException, host: ArgumentsHost): Observable<any> {
+    const error = exception.getError();
+    // Если объект — возвращаем как есть
+    if (typeof error === 'object') {
+      return throwError(() => error);
     }
+
+    // иначе — оборачиваем строку
+    return throwError(() => ({
+      statusCode: 500,
+      message: error,
+    }));
+  }
 }
+

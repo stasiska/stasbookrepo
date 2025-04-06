@@ -49,7 +49,7 @@ export class AuthService {
     }
 
 
-    public async login(dto: LoginDto) {
+    public async login(dto) {
         const user = await this.userService.findByEmail(dto.email)
         if (!user || !user.password) {
             throw new RpcException('Пользователь не найден')
@@ -70,9 +70,11 @@ export class AuthService {
             if (!dto.code) {
                 await this.twoFactorAuthService.sendTwoFactorToken(user.email)
 
-                return {
-                    message: `Проверьте вашу почту. Требуется код двуйфакторной аутентификации.`
-                }
+                throw new RpcException({
+                    statusCode: 401,
+                    errorCode: 'TWO_FACTOR_REQUIRED',
+                    message: 'Требуется код двухфакторной аутентификации. Проверьте почту.'
+                  });
             }
             await this.twoFactorAuthService.validateTwoFactorToken(user.email, dto.code)
         }
@@ -86,7 +88,6 @@ export class AuthService {
     ) {
         const providerInstance = this.provderSerivce.findByService(provider)
         const profile = await providerInstance.findUserByCode(code)
-        console.log(profile, "profile")
         const account = await this.db.select().from(schema.account).where(and(
             eq(schema.account.id, profile.id),
             eq(schema.account.provider, profile.provider)
@@ -155,4 +156,10 @@ export class AuthService {
             })
         })
     }
+
+    public async checkProfile(userId:string) {
+        const user  = await this.userService.checkProfile(userId)
+        return user
+    }
+    
 }

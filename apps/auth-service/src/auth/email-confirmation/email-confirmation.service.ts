@@ -60,7 +60,7 @@ export class EmailConfirmationService {
             eq(schema.tokens.type,'VERIFICATION')
         ))
     
-        return existingUser.id
+        return {id : existingUser.id}
     }
 
     public async sendVerificationToken(email: string) {

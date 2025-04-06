@@ -9,18 +9,20 @@ import { DrizzleModule } from 'src/drizzle/drizzle.module';
 import { MailService } from 'src/libs/mail/mail.service';
 import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
 import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service';
+import { PasswordRecoveryModule } from './password-recovery/password-recovery.module';
 
 @Module({
   imports: [
+    PasswordRecoveryModule,
     ProviderModule.registerAsync({
     imports: [ConfigModule],
     useFactory: getProvidersConfig,
     inject: [ConfigService],
   },),
   DrizzleModule,
-  forwardRef(() => EmailConfirmationModule)],
+  forwardRef(() => EmailConfirmationModule), ],
   controllers: [AuthController],
-  providers: [AuthService, UserService, MailService, TwoFactorAuthService,],
+  providers: [AuthService, UserService, MailService, TwoFactorAuthService, ],
   exports: [AuthService]
 })
 export class AuthModule {}

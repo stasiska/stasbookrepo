@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package user_service;
+
+service AuthService {
+    rpc GetUserById(FindOneUserByIdDto) returns (User);
+    rpc Registration(RegistrationDto) returns (User);
+    rpc Login(LoginDto) returns (User);
+    rpc OauthCallback (OauthCallbackDto) returns (OauthCallbackRes);
+    rpc OauthConnect (providerDto) returns (oauthConnectRes);
+    rpc CheckProfile (FindOneUserByIdDto) returns (User);
+    rpc EmailConfirmation (emailConfirmationDto) returns (FindOneUserByIdDto);
+    rpc PasswordReset (resetPasswordDto) returns (Boolean);
+    rpc PasswordNew (passwordDto) returns (Boolean);
+}
+
+message Boolean {
+    bool bool = 1;
+}
+
+message passwordDto {
+    string password = 1;
+    string token = 2;
+}
+
+message resetPasswordDto {
+    string email = 1;
+}
+
+message oauthConnectRes {
+    string url = 1;
+}
+
+message providerDto {
+    string provider = 1;
+}
+message emailConfirmationDto {
+    string token = 1;
+}
+
+message Empty { }
+
+message RegistrationDto {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+    string passwordRepeat = 4; 
+}
+
+message OauthCallbackRes {
+    string redirectURL = 1;
+    User user = 2;
+}
+
+message OauthCallbackDto {
+    string code = 1;
+    string provider = 2;
+}
+
+message LoginDto {
+    string email = 1;
+    string password = 2;
+    optional string code = 3; 
+}
+
+message FindOneUserByEmailDto {
+    string email = 1;
+}
+
+message FindOneUserByIdDto {
+    string id = 1;
+}
+
+message User {
+    string id = 1;
+    string displayName = 2;
+    string email = 3;
+    string password = 4;
+    optional string picture = 5;
+    string role = 6;
+    bool isVerified = 7;
+    bool isTwoFactorEnabled = 8;
+    string method = 9;
+}
+
+message CreateUserDto {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}

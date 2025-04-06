@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "prettier": "^3.5.3",
+    "ts-proto": "^1.146.0",
     "turbo": "^2.4.4",
     "typescript": "5.8.2"
   },
@@ -23,7 +24,9 @@
     "packages/*"
   ],
   "dependencies": {
-    "@nestjs/microservices": "^11.0.12",
+    "@grpc/grpc-js": "^1.13.2",
+    "@grpc/proto-loader": "^0.7.13",
+    "@nestjs/microservices": "^10.4.15",
     "ioredis": "^5.6.0"
   }
 }

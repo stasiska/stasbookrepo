@@ -2,13 +2,13 @@ import { Body, Controller, Post, Req } from '@nestjs/common';
 import { EmailConfirmationService } from './email-confirmation.service';
 import { Request } from 'express';
 import { ConfirmationDto } from './dto/confirmation.dto';
-import { MessagePattern } from '@nestjs/microservices';
+import { GrpcMethod, GrpcService, MessagePattern } from '@nestjs/microservices';
 
-@Controller()
+@GrpcService()
 export class EmailConfirmationController {
   constructor(private readonly emailConfirmationService: EmailConfirmationService) {}
 
-  @MessagePattern('email-confirmation')
+  
   public async newVerificatoin(
     data: {
         dto: ConfirmationDto

@@ -28,7 +28,9 @@ export class PasswordRecoveryService {
         const passwordResetToken = await this.generatePasswordResetToken(existingUser.email)
         await this.mailService.sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)
 
-        return true
+        return {
+            bool: true
+        }
     }
 
 
@@ -68,7 +70,7 @@ export class PasswordRecoveryService {
             eq(schema.tokens.type, 'PASSWORD_RESET')
         ))
 
-        return true
+        return { bool: true}
     }
 
     private async generatePasswordResetToken(email: string) {

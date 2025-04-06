@@ -10,18 +10,13 @@ import { ConfirmationDto } from './dto/email-confirmation.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Authorized } from './decorators/authorized.decorator';
 
-@Controller('auth-service')
+@Controller('auth-service0.7')
 export class AuthServiceController {
     constructor(@Inject(MICROSERVICES_CLIENTS.AUTH_SERVICE)
     private authServiceClient: ClientProxy,
     ) { }
 
 
-
-    @Post("createUser")
-    createUser(@Body() dto: any) {
-        return this.authServiceClient.send('create_user', dto)
-    }
 
     @Post("registration")
     async registration(@Body() dto: RegisterDto, @Req() req: Request) {

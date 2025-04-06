@@ -8,6 +8,7 @@ import { DrizzleModule } from 'src/drizzle/drizzle.module';
 @Module({
   controllers: [PasswordRecoveryController],
   providers: [PasswordRecoveryService, MailService, UserService],
-  imports: [DrizzleModule]
+  imports: [DrizzleModule],
+  exports: [PasswordRecoveryService]
 })
 export class PasswordRecoveryModule {}

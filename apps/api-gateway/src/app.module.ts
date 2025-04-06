@@ -3,9 +3,12 @@ import { AuthServiceController } from './auth-service/auth-service.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MICROSERVICES_CLIENTS } from './constans';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth2/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
+  imports: [
+    AuthModule
+    ,ConfigModule.forRoot({
     isGlobal: true,
   }),
     ClientsModule.register([
