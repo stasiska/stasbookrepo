@@ -1,10 +1,11 @@
-import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Param, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Param, Post, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Request, Response } from "express";
 import { RegisterDto } from "./dto/register.dto";
 import { ConfirmationDto } from "./dto/email-confirmation.dto";
 import { AuthGuard } from "src/guards/auth.guard";
 import { Authorized } from "./decorators/authorized.decorator";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('auth-service')
 export class AuthContoller {
@@ -71,4 +72,11 @@ export class AuthContoller {
     public async passwordNew(@Body() dto: any, @Param('token') token: string) {
         return this.authService.passwordNew(dto,token)
     }
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    uploadFile(@UploadedFile() file) {
+        console.log(file.buffer)
+    }
+
 }

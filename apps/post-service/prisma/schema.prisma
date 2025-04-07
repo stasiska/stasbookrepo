@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "./__generated__"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URI")
+}
+
+model Post {
+  id String @id @default(uuid())
+  content String
+
+  medias     Media[]   
+  likes      Like[]    
+  comments   Comment[] 
+
+  authorId String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+
+
+  @@map("posts")
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  postId String  @map("post_id")
+  posts Post? @relation(fields: [postId], references: [id])
+
+  text String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("comments")
+}
+
+
+model Media {
+  id String @id @default(uuid())
+  url String
+  post Post? @relation(fields: [postId], references: [id]) 
+  postId String  @map("post_id")
+  type  MediaType
+  @@map("media")
+}
+
+model Like {
+  id String @id @default(uuid())
+  postId String @map("post_id")
+  posts Post? @relation(fields: [postId], references: [id])
+  userId String @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("likes")
+
+}
+
+enum MediaType {
+  VIDEO
+  IMAGE
+}

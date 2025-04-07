@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package post_service;
+
+import "google/protobuf/timestamp.proto";
+
+service PostService {
+    rpc CreatePost(CreatePostDto) returns (Post);
+    rpc GetPostById(GetPostByIdDto) returns (Post);
+    rpc GetPostByUserId(GetPostByUserIdDto) returns (Posts);
+    rpc LikePost(LikePostDto) returns (Post);
+    rpc CommentPost(CommentPostDto) returns (Post);
+    rpc CreateMedia(CreateMediaDto) returns (Media);
+}
+
+message CreateMediaDto {
+    string url = 1;
+    string type = 2; 
+}
+
+message CreatePostDto {
+    string content = 1;
+    string mediaUrl = 2;
+    string mediaType = 3;
+    string authorId = 4;
+}
+
+message GetPostByIdDto {
+    string postId = 1;
+}
+
+message GetPostByUserIdDto {
+    string authorId = 1;
+}
+
+message Posts {
+    repeated Post posts = 1;
+}
+
+message LikePostDto {
+    string postId = 1;
+    string userId = 2;
+}
+
+message CommentPostDto {
+    string postId = 1;
+    string userId = 2;
+    string text = 3;
+}
+
+message Post {
+    string id = 1;
+    string content = 2;
+    repeated Media media = 3;
+    string authorId = 4;
+    google.protobuf.Timestamp createdAt = 5;
+    google.protobuf.Timestamp updatedAt = 6;
+    repeated Like likes = 7;
+    repeated Comment comments = 8;
+}
+
+message Like {
+    string id = 1;
+    string postId = 2;
+    string userId = 3;
+    google.protobuf.Timestamp createdAt = 4;
+  }
+
+message Comment {
+    string id = 1;
+    string postId = 2;
+    string userId = 3;
+    string text = 4;
+    google.protobuf.Timestamp createdAt = 5;
+}
+
+message Media {
+    string id = 1;
+    string url = 2;
+    string type = 4; 
+}

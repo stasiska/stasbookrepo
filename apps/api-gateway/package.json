@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@lib/grpc": "0.0.1",
+    "@lib/s3": "0.0.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",
