@@ -2346,6 +2346,7 @@ export namespace Prisma {
   export type CommentMinAggregateOutputType = {
     id: string | null
     postId: string | null
+    userId: string | null
     text: string | null
     createdAt: Date | null
   }
@@ -2353,6 +2354,7 @@ export namespace Prisma {
   export type CommentMaxAggregateOutputType = {
     id: string | null
     postId: string | null
+    userId: string | null
     text: string | null
     createdAt: Date | null
   }
@@ -2360,6 +2362,7 @@ export namespace Prisma {
   export type CommentCountAggregateOutputType = {
     id: number
     postId: number
+    userId: number
     text: number
     createdAt: number
     _all: number
@@ -2369,6 +2372,7 @@ export namespace Prisma {
   export type CommentMinAggregateInputType = {
     id?: true
     postId?: true
+    userId?: true
     text?: true
     createdAt?: true
   }
@@ -2376,6 +2380,7 @@ export namespace Prisma {
   export type CommentMaxAggregateInputType = {
     id?: true
     postId?: true
+    userId?: true
     text?: true
     createdAt?: true
   }
@@ -2383,6 +2388,7 @@ export namespace Prisma {
   export type CommentCountAggregateInputType = {
     id?: true
     postId?: true
+    userId?: true
     text?: true
     createdAt?: true
     _all?: true
@@ -2463,6 +2469,7 @@ export namespace Prisma {
   export type CommentGroupByOutputType = {
     id: string
     postId: string
+    userId: string
     text: string
     createdAt: Date
     _count: CommentCountAggregateOutputType | null
@@ -2487,6 +2494,7 @@ export namespace Prisma {
   export type CommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     postId?: boolean
+    userId?: boolean
     text?: boolean
     createdAt?: boolean
     posts?: boolean | Comment$postsArgs<ExtArgs>
@@ -2495,6 +2503,7 @@ export namespace Prisma {
   export type CommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     postId?: boolean
+    userId?: boolean
     text?: boolean
     createdAt?: boolean
     posts?: boolean | Comment$postsArgs<ExtArgs>
@@ -2503,6 +2512,7 @@ export namespace Prisma {
   export type CommentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     postId?: boolean
+    userId?: boolean
     text?: boolean
     createdAt?: boolean
     posts?: boolean | Comment$postsArgs<ExtArgs>
@@ -2511,11 +2521,12 @@ export namespace Prisma {
   export type CommentSelectScalar = {
     id?: boolean
     postId?: boolean
+    userId?: boolean
     text?: boolean
     createdAt?: boolean
   }
 
-  export type CommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "text" | "createdAt", ExtArgs["result"]["comment"]>
+  export type CommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "userId" | "text" | "createdAt", ExtArgs["result"]["comment"]>
   export type CommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     posts?: boolean | Comment$postsArgs<ExtArgs>
   }
@@ -2534,6 +2545,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       postId: string
+      userId: string
       text: string
       createdAt: Date
     }, ExtArgs["result"]["comment"]>
@@ -2962,6 +2974,7 @@ export namespace Prisma {
   interface CommentFieldRefs {
     readonly id: FieldRef<"Comment", 'String'>
     readonly postId: FieldRef<"Comment", 'String'>
+    readonly userId: FieldRef<"Comment", 'String'>
     readonly text: FieldRef<"Comment", 'String'>
     readonly createdAt: FieldRef<"Comment", 'DateTime'>
   }
@@ -3527,7 +3540,7 @@ export namespace Prisma {
   export type MediaGroupByOutputType = {
     id: string
     url: string
-    postId: string
+    postId: string | null
     type: $Enums.MediaType
     _count: MediaCountAggregateOutputType | null
     _min: MediaMinAggregateOutputType | null
@@ -3598,7 +3611,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       url: string
-      postId: string
+      postId: string | null
       type: $Enums.MediaType
     }, ExtArgs["result"]["media"]>
     composites: {}
@@ -5553,6 +5566,7 @@ export namespace Prisma {
   export const CommentScalarFieldEnum: {
     id: 'id',
     postId: 'postId',
+    userId: 'userId',
     text: 'text',
     createdAt: 'createdAt'
   };
@@ -5594,6 +5608,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -5727,6 +5749,7 @@ export namespace Prisma {
     NOT?: CommentWhereInput | CommentWhereInput[]
     id?: StringFilter<"Comment"> | string
     postId?: StringFilter<"Comment"> | string
+    userId?: StringFilter<"Comment"> | string
     text?: StringFilter<"Comment"> | string
     createdAt?: DateTimeFilter<"Comment"> | Date | string
     posts?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
@@ -5735,6 +5758,7 @@ export namespace Prisma {
   export type CommentOrderByWithRelationInput = {
     id?: SortOrder
     postId?: SortOrder
+    userId?: SortOrder
     text?: SortOrder
     createdAt?: SortOrder
     posts?: PostOrderByWithRelationInput
@@ -5746,6 +5770,7 @@ export namespace Prisma {
     OR?: CommentWhereInput[]
     NOT?: CommentWhereInput | CommentWhereInput[]
     postId?: StringFilter<"Comment"> | string
+    userId?: StringFilter<"Comment"> | string
     text?: StringFilter<"Comment"> | string
     createdAt?: DateTimeFilter<"Comment"> | Date | string
     posts?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
@@ -5754,6 +5779,7 @@ export namespace Prisma {
   export type CommentOrderByWithAggregationInput = {
     id?: SortOrder
     postId?: SortOrder
+    userId?: SortOrder
     text?: SortOrder
     createdAt?: SortOrder
     _count?: CommentCountOrderByAggregateInput
@@ -5767,6 +5793,7 @@ export namespace Prisma {
     NOT?: CommentScalarWhereWithAggregatesInput | CommentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Comment"> | string
     postId?: StringWithAggregatesFilter<"Comment"> | string
+    userId?: StringWithAggregatesFilter<"Comment"> | string
     text?: StringWithAggregatesFilter<"Comment"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Comment"> | Date | string
   }
@@ -5777,7 +5804,7 @@ export namespace Prisma {
     NOT?: MediaWhereInput | MediaWhereInput[]
     id?: StringFilter<"Media"> | string
     url?: StringFilter<"Media"> | string
-    postId?: StringFilter<"Media"> | string
+    postId?: StringNullableFilter<"Media"> | string | null
     type?: EnumMediaTypeFilter<"Media"> | $Enums.MediaType
     post?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
   }
@@ -5785,7 +5812,7 @@ export namespace Prisma {
   export type MediaOrderByWithRelationInput = {
     id?: SortOrder
     url?: SortOrder
-    postId?: SortOrder
+    postId?: SortOrderInput | SortOrder
     type?: SortOrder
     post?: PostOrderByWithRelationInput
   }
@@ -5796,7 +5823,7 @@ export namespace Prisma {
     OR?: MediaWhereInput[]
     NOT?: MediaWhereInput | MediaWhereInput[]
     url?: StringFilter<"Media"> | string
-    postId?: StringFilter<"Media"> | string
+    postId?: StringNullableFilter<"Media"> | string | null
     type?: EnumMediaTypeFilter<"Media"> | $Enums.MediaType
     post?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
   }, "id">
@@ -5804,7 +5831,7 @@ export namespace Prisma {
   export type MediaOrderByWithAggregationInput = {
     id?: SortOrder
     url?: SortOrder
-    postId?: SortOrder
+    postId?: SortOrderInput | SortOrder
     type?: SortOrder
     _count?: MediaCountOrderByAggregateInput
     _max?: MediaMaxOrderByAggregateInput
@@ -5817,7 +5844,7 @@ export namespace Prisma {
     NOT?: MediaScalarWhereWithAggregatesInput | MediaScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Media"> | string
     url?: StringWithAggregatesFilter<"Media"> | string
-    postId?: StringWithAggregatesFilter<"Media"> | string
+    postId?: StringNullableWithAggregatesFilter<"Media"> | string | null
     type?: EnumMediaTypeWithAggregatesFilter<"Media"> | $Enums.MediaType
   }
 
@@ -5941,6 +5968,7 @@ export namespace Prisma {
 
   export type CommentCreateInput = {
     id?: string
+    userId: string
     text: string
     createdAt?: Date | string
     posts?: PostCreateNestedOneWithoutCommentsInput
@@ -5949,12 +5977,14 @@ export namespace Prisma {
   export type CommentUncheckedCreateInput = {
     id?: string
     postId: string
+    userId: string
     text: string
     createdAt?: Date | string
   }
 
   export type CommentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateOneWithoutCommentsNestedInput
@@ -5963,6 +5993,7 @@ export namespace Prisma {
   export type CommentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5970,12 +6001,14 @@ export namespace Prisma {
   export type CommentCreateManyInput = {
     id?: string
     postId: string
+    userId: string
     text: string
     createdAt?: Date | string
   }
 
   export type CommentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5983,6 +6016,7 @@ export namespace Prisma {
   export type CommentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5997,7 +6031,7 @@ export namespace Prisma {
   export type MediaUncheckedCreateInput = {
     id?: string
     url: string
-    postId: string
+    postId?: string | null
     type: $Enums.MediaType
   }
 
@@ -6011,14 +6045,14 @@ export namespace Prisma {
   export type MediaUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   }
 
   export type MediaCreateManyInput = {
     id?: string
     url: string
-    postId: string
+    postId?: string | null
     type: $Enums.MediaType
   }
 
@@ -6031,7 +6065,7 @@ export namespace Prisma {
   export type MediaUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   }
 
@@ -6203,6 +6237,7 @@ export namespace Prisma {
   export type CommentCountOrderByAggregateInput = {
     id?: SortOrder
     postId?: SortOrder
+    userId?: SortOrder
     text?: SortOrder
     createdAt?: SortOrder
   }
@@ -6210,6 +6245,7 @@ export namespace Prisma {
   export type CommentMaxOrderByAggregateInput = {
     id?: SortOrder
     postId?: SortOrder
+    userId?: SortOrder
     text?: SortOrder
     createdAt?: SortOrder
   }
@@ -6217,8 +6253,24 @@ export namespace Prisma {
   export type CommentMinOrderByAggregateInput = {
     id?: SortOrder
     postId?: SortOrder
+    userId?: SortOrder
     text?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type EnumMediaTypeFilter<$PrismaModel = never> = {
@@ -6226,6 +6278,11 @@ export namespace Prisma {
     in?: $Enums.MediaType[] | ListEnumMediaTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.MediaType[] | ListEnumMediaTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumMediaTypeFilter<$PrismaModel> | $Enums.MediaType
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type MediaCountOrderByAggregateInput = {
@@ -6247,6 +6304,24 @@ export namespace Prisma {
     url?: SortOrder
     postId?: SortOrder
     type?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type EnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -6450,6 +6525,10 @@ export namespace Prisma {
     update?: XOR<XOR<PostUpdateToOneWithWhereWithoutMediasInput, PostUpdateWithoutMediasInput>, PostUncheckedUpdateWithoutMediasInput>
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type PostCreateNestedOneWithoutLikesInput = {
     create?: XOR<PostCreateWithoutLikesInput, PostUncheckedCreateWithoutLikesInput>
     connectOrCreate?: PostCreateOrConnectWithoutLikesInput
@@ -6533,11 +6612,53 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedEnumMediaTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.MediaType | EnumMediaTypeFieldRefInput<$PrismaModel>
     in?: $Enums.MediaType[] | ListEnumMediaTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.MediaType[] | ListEnumMediaTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumMediaTypeFilter<$PrismaModel> | $Enums.MediaType
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -6596,12 +6717,14 @@ export namespace Prisma {
 
   export type CommentCreateWithoutPostsInput = {
     id?: string
+    userId: string
     text: string
     createdAt?: Date | string
   }
 
   export type CommentUncheckedCreateWithoutPostsInput = {
     id?: string
+    userId: string
     text: string
     createdAt?: Date | string
   }
@@ -6638,7 +6761,7 @@ export namespace Prisma {
     NOT?: MediaScalarWhereInput | MediaScalarWhereInput[]
     id?: StringFilter<"Media"> | string
     url?: StringFilter<"Media"> | string
-    postId?: StringFilter<"Media"> | string
+    postId?: StringNullableFilter<"Media"> | string | null
     type?: EnumMediaTypeFilter<"Media"> | $Enums.MediaType
   }
 
@@ -6690,6 +6813,7 @@ export namespace Prisma {
     NOT?: CommentScalarWhereInput | CommentScalarWhereInput[]
     id?: StringFilter<"Comment"> | string
     postId?: StringFilter<"Comment"> | string
+    userId?: StringFilter<"Comment"> | string
     text?: StringFilter<"Comment"> | string
     createdAt?: DateTimeFilter<"Comment"> | Date | string
   }
@@ -6876,6 +7000,7 @@ export namespace Prisma {
 
   export type CommentCreateManyPostsInput = {
     id?: string
+    userId: string
     text: string
     createdAt?: Date | string
   }
@@ -6918,18 +7043,21 @@ export namespace Prisma {
 
   export type CommentUpdateWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommentUncheckedUpdateWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommentUncheckedUpdateManyWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

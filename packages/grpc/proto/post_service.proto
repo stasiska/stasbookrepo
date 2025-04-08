@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package post_service;
 
-import "google/protobuf/timestamp.proto";
 
 service PostService {
     rpc CreatePost(CreatePostDto) returns (Post);
@@ -53,8 +52,8 @@ message Post {
     string content = 2;
     repeated Media media = 3;
     string authorId = 4;
-    google.protobuf.Timestamp createdAt = 5;
-    google.protobuf.Timestamp updatedAt = 6;
+    string createdAt = 5;
+    string updatedAt = 6;
     repeated Like likes = 7;
     repeated Comment comments = 8;
 }
@@ -63,7 +62,7 @@ message Like {
     string id = 1;
     string postId = 2;
     string userId = 3;
-    google.protobuf.Timestamp createdAt = 4;
+    string createdAt = 4;
   }
 
 message Comment {
@@ -71,7 +70,7 @@ message Comment {
     string postId = 2;
     string userId = 3;
     string text = 4;
-    google.protobuf.Timestamp createdAt = 5;
+    string createdAt = 5;
 }
 
 message Media {

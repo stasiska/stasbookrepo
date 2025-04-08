@@ -29,7 +29,8 @@ model Comment {
   postId String @map("post_id")
   posts  Post?  @relation(fields: [postId], references: [id])
 
-  text String
+  userId String @map("user_id")
+  text   String
 
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -40,7 +41,7 @@ model Media {
   id     String    @id @default(uuid())
   url    String
   post   Post?     @relation(fields: [postId], references: [id])
-  postId String    @map("post_id")
+  postId String?   @map("post_id")
   type   MediaType
 
   @@map("media")

@@ -17,7 +17,6 @@ import {
       secretAccessKey: string;
       bucket: string;
     }) {
-      console.log(options)
       const { endpoint, region, accessKeyId, secretAccessKey, bucket } = options;
   
       this.client = new S3Client({

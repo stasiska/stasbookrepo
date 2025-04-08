@@ -7,7 +7,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
-import { Timestamp } from "./google/protobuf/timestamp";
 
 export const protobufPackage = "post_service";
 
@@ -51,8 +50,8 @@ export interface Post {
   content: string;
   media: Media[];
   authorId: string;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
+  createdAt: string;
+  updatedAt: string;
   likes: Like[];
   comments: Comment[];
 }
@@ -61,7 +60,7 @@ export interface Like {
   id: string;
   postId: string;
   userId: string;
-  createdAt: Timestamp | undefined;
+  createdAt: string;
 }
 
 export interface Comment {
@@ -69,7 +68,7 @@ export interface Comment {
   postId: string;
   userId: string;
   text: string;
-  createdAt: Timestamp | undefined;
+  createdAt: string;
 }
 
 export interface Media {

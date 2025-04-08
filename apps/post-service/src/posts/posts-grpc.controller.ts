@@ -18,17 +18,17 @@ export class PostsController implements PostServiceController {
 
   @GrpcMethod('PostService', "GetPostById")
   getPostById(request: GetPostByIdDto): Promise<Post> | Observable<Post> | Post {
-    throw new Error('Method not implemented.');
+    return this.postsService.getPostById(request);
   }
 
   @GrpcMethod('PostService', "GetPostByUserId")
   getPostByUserId(request: GetPostByUserIdDto): Promise<Posts> | Observable<Posts> | Posts {
-    throw new Error('Method not implemented.');
+    return this.postsService.getPostByUserId(request);
   }
 
   @GrpcMethod('PostService', "LikePost")
   likePost(request: LikePostDto): Promise<Post> | Observable<Post> | Post {
-    throw new Error('Method not implemented.');
+    return this.postsService.likePost(request);
   }
 
   @GrpcMethod('PostService', "CommentPost")

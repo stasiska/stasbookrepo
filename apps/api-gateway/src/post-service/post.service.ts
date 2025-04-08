@@ -4,13 +4,14 @@ import { firstValueFrom } from 'rxjs';
 import { S3Service } from '@lib/s3/dist/index';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'process';
+import { CreatePostDto } from './dto/createPostDto';
 @Injectable()
 export class PostService {
     constructor(private readonly postServiceClientService: PostServiceClientService,
         private readonly config: ConfigService
     ) {}
 
-    async createPost(file) {
+    async createPost(file,userId: string, dto: CreatePostDto) {
         const s3 = new S3Service({
             endpoint: this.config.getOrThrow('S3_ENDPOINT'),
             region: this.config.getOrThrow('S3_REGION'),
@@ -19,12 +20,57 @@ export class PostService {
             bucket: this.config.getOrThrow('S3_BUCKET_NAME'),
           });
         const originalName = `${Date.now()}-${file.originalname}`
-        s3.upload(file.buffer, originalName,'image')
-        
-        return await firstValueFrom(this.postServiceClientService.createPost({content: 'string',
-            mediaUrl: "string",
-            mediaType: "string",
-            authorId: "string",
+        const linkOnImage = `${this.config.getOrThrow('S3_GET_STATIC')}${originalName}`
+        //s3.upload(file.buffer, originalName,'image')
+        return await firstValueFrom(this.postServiceClientService.createPost({
+            content: dto.content || ' ',
+            mediaUrl: linkOnImage,
+            mediaType: "image",
+            authorId: userId,
         }))
+    }
+
+
+    async getPostById(postId: string) {
+        try {
+            const res = await firstValueFrom(this.postServiceClientService.getPostById({
+                postId: postId
+            })) 
+            return res
+        } catch(err) {
+            return  {
+                message: [err.details],
+                error: "Not Found",
+                statusCode: 404
+            }
+        }
+    }
+
+    async getPostsByUserId(userId: string) {
+        try {
+            const res = await firstValueFrom(this.postServiceClientService.getPostByUserId({
+                authorId: userId
+            })) 
+            return res
+        } catch(err) {
+            return  {
+                message: [err.details],
+                error: "Not Found",
+                statusCode: 404
+            }
+        }
+    }
+
+    async likePost(postId: string, userId: string) {
+        try {
+            const res = await firstValueFrom(this.postServiceClientService.likePost({userId: userId, postId: postId}))
+            return res
+        } catch(err){
+            return  {
+                message: [err.details],
+                error: "Not Found",
+                statusCode: 400
+            }
+        }
     }
 }

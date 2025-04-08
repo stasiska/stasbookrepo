@@ -128,6 +128,7 @@ exports.Prisma.PostScalarFieldEnum = {
 exports.Prisma.CommentScalarFieldEnum = {
   id: 'id',
   postId: 'postId',
+  userId: 'userId',
   text: 'text',
   createdAt: 'createdAt'
 };
@@ -154,6 +155,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.MediaType = exports.$Enums.MediaType = {
   VIDEO: 'VIDEO',
