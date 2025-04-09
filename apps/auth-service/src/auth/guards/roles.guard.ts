@@ -3,7 +3,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { UserRole } from 'src/drizzle/types/drizzle';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcForbidden } from '@lib/shared/dist';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -18,7 +18,7 @@ export class RolesGuard implements CanActivate {
     if (!roles) return true
 
     if (!roles.includes(request.user.role)){
-        throw new RpcException('Недостаточно прав. У вас нет прав доступа к этому ресурсу.')
+        throw GrpcForbidden('Недостаточно прав. У вас нет прав доступа к этому ресурсу.')
     }
     return true
   }

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { TypeBaseProviderOptions } from "./types/base-provider.options.types";
 import { TypeUserInfo } from "./types/user-info.types";
-import { RpcException } from "@nestjs/microservices";
+import { GrpcBadRequest, GrpcNotFound } from "@lib/shared/dist";
 
 @Injectable()
 export class BaseOAuthService {
@@ -51,7 +51,7 @@ export class BaseOAuthService {
 		})
 
 		if (!tokensRequest.ok) {
-			throw new RpcException(
+			throw GrpcNotFound(
 				`Не удалось получить пользователя с ${this.options.profile_url}. Проверьте правильность токена доступа.`
 			)
 		}
@@ -59,7 +59,7 @@ export class BaseOAuthService {
 		const tokens = await tokensRequest.json()
 
 		if (!tokens.access_token) {
-			throw new RpcException(
+			throw GrpcNotFound(
 				`Нет токенов с ${this.options.access_url}. Убедитесь, что код авторизации действителен.`
 			)
 		}
@@ -71,7 +71,7 @@ export class BaseOAuthService {
 		})
 
 		if (!userRequest.ok) {
-			throw new RpcException(
+			throw GrpcBadRequest(
 				`Не удалось получить пользователя с ${this.options.profile_url}. Проверьте правильность токена доступа.`
 			)
 		}

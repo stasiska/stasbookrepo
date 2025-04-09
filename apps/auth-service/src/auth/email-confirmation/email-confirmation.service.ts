@@ -9,7 +9,7 @@ import { ConfirmationDto } from './dto/confirmation.dto';
 import * as schema from '../../drizzle/schema/schema';
 import { and, eq } from 'drizzle-orm';
 import {v4 as uuidv4}from 'uuid'
-import { RpcException } from '@nestjs/microservices';
+import { GrpcBadRequest, GrpcNotFound } from '@lib/shared/dist';
 
 
 @Injectable()
@@ -29,7 +29,7 @@ export class EmailConfirmationService {
 
 
         if (!existingToken[0]) {
-            throw new RpcException(
+            throw GrpcNotFound(
                 'Токен подтверждения не найден. Пожалуйста, убедитесь, что у вас правильный токен.'
             )
         }
@@ -38,7 +38,7 @@ export class EmailConfirmationService {
 
 
         if (hasExpired) {
-            throw new RpcException(
+            throw GrpcBadRequest(
                 'Токен подтверждения истек. Пожалуйста, запросите новый токен для подтверждения.'
             )
         }
@@ -46,7 +46,7 @@ export class EmailConfirmationService {
         const existingUser = await this.userService.findByEmail(existingToken[0].email)
         
         if (!existingUser) {
-            throw new RpcException(
+            throw GrpcNotFound(
                 'Пользователь не найден. Пожалуйста, проверьте введенный адрес электронной почты и попробуйте снова.'
             )
         }

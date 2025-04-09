@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Param, Post, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Param, Post, Query, Req, Res, UploadedFile, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
 import { PostService } from "./post.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/guards/auth.guard";
@@ -16,19 +16,18 @@ export class PostController {
         @Authorized('id') userId: string,
         @Body() dto: CreatePostDto
     ) {
-        const res = this.postService.createPost(file, userId, dto)
-        return res
+        return this.postService.createPost(file, userId, dto)
+
     }
 
     @Get(':id')
     async getPostById(@Param('id') id: string) {
-        const res = this.postService.getPostById(id)
-        return res
+        return this.postService.getPostById(id)
     }
 
     @Get('user/:id')
     async getPostsByUserId(@Param('id') id: string) {
-        const res = this.postService.getPostsByUserId(id)
+        return this.postService.getPostsByUserId(id)
     }
 
     @UseGuards(AuthGuard)
@@ -37,8 +36,7 @@ export class PostController {
         @Body() dto: any,
         @Authorized('id') userId: string,
     ) {
-        const res = this.postService.likePost(dto.postId, userId)
-        return res
+        return this.postService.likePost(dto.postId, userId)
     }
 
     @UseGuards(AuthGuard)

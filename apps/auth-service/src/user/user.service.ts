@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { hash } from 'argon2';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcNotFound } from '@lib/shared/dist';
 
 @Injectable()
 export class UserService {
@@ -45,7 +45,7 @@ export class UserService {
         const user = await this.db.select().from(schema.users).where(eq(schema.users.id, id))
 
         if (!user[0]) {
-            throw new RpcException('Пользователь не найден. Пожалуйста, проверте входные данные.')
+            throw GrpcNotFound('Пользователь не найден. Пожалуйста, проверте входные данные.')
 
         }
 

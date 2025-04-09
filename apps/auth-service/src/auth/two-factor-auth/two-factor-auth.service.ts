@@ -4,7 +4,7 @@ import { DrizzleDB } from 'src/drizzle/types/drizzle';
 import { MailService } from 'src/libs/mail/mail.service';
 import * as schema from '../../drizzle/schema/schema';
 import { and, eq } from 'drizzle-orm';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcNotFound, GrpcRequestTimeOut } from '@lib/shared/dist';
 
 @Injectable()
 export class TwoFactorAuthService {
@@ -19,20 +19,20 @@ export class TwoFactorAuthService {
         ))
 
         if (!existingToken[0]) {
-            throw new RpcException(
+            throw GrpcNotFound(
                 'Токен двухфакторной аутентификации не найден. Убедитесь, сто вы запрашивали токен для данного адреса электронной почты.'
 
             )
         }
 
         if (existingToken[0].token !== code) {
-            throw new RpcException(`Неверный код двухфакторной аунтефикации. Пожалуйста, проверьте введенный код и попробуйте снова.`)
+            throw GrpcNotFound(`Неверный код двухфакторной аунтефикации. Пожалуйста, проверьте введенный код и попробуйте снова.`)
         }
 
         const hashExpired = new Date(existingToken[0].expiresIn) <new Date()
 
         if (hashExpired) {
-            throw new RpcException(
+            throw GrpcRequestTimeOut(
                 'Срок действия токена двухфакторной аутентификации истек. Пожалуйста, запросите новый токен.'
             )
         }

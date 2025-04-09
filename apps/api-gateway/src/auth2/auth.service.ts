@@ -120,11 +120,7 @@ export class AuthService {
             const res = await firstValueFrom(this.authServiceClientService.passwordReset(dto))
             return res
         }catch(err) {
-            return {
-                code: 404,
-                message: err.details,
-                statusCode: "Err"
-            }
+            return err
         }
     } 
 

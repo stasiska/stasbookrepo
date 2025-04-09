@@ -1,0 +1,12 @@
+{
+  "name": "@lib/shared",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "build": "nest build"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+
+}

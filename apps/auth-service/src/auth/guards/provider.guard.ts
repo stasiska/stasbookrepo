@@ -2,7 +2,7 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { Request } from 'express';
 import { ProviderService } from '../provider/provider.service';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcNotFound } from '@lib/shared/dist';
 
 @Injectable()
 export class AuthProviderGuard implements CanActivate {
@@ -17,7 +17,7 @@ export class AuthProviderGuard implements CanActivate {
     const providerInstance = this.providerService.findByService(provider)
 
     if (!providerInstance){
-        throw new RpcException(
+        throw GrpcNotFound(
             `Провайдер "${provider}" не найден. Пожалуйста, проверьте правильность введнных данных.`
         )
     }

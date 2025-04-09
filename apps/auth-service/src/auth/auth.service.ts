@@ -12,7 +12,7 @@ import { EmailConfirmationService } from './email-confirmation/email-confirmatio
 import * as schema from '../drizzle/schema/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcBadRequest, GrpcConflict, GrpcNotFound } from '@lib/shared/dist';
 
 
 @Injectable()
@@ -31,7 +31,7 @@ export class AuthService {
         const isExists = await this.userService.findByEmail(dto.email)
 
         if (isExists) {
-            throw new RpcException("пользователь уже существует")
+            throw GrpcConflict("пользователь уже существует")
         }
 
         const newUser = await this.userService.create({
@@ -52,33 +52,28 @@ export class AuthService {
     public async login(dto) {
         const user = await this.userService.findByEmail(dto.email)
         if (!user || !user.password) {
-            throw new RpcException('Пользователь не найден')
+            throw GrpcNotFound('Пользователь не найден')
         }
 
         const isValidPassword = await verify(user.password, dto.password)
 
         if (!isValidPassword) {
-            throw new RpcException('Неверный пароль. Пожалуйста, попробуйте еще раз или восстановите пароль, есле забыли его')
+            throw GrpcConflict('Неверный пароль. Пожалуйста, попробуйте еще раз или восстановите пароль, есле забыли его')
         }
 
         if (!user.isVerified) {
             await this.emailConfirmationService.sendVerificationToken(user.email)
-            throw new RpcException('Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес')
+            throw GrpcBadRequest('Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес')
         }
 
         if (user.isTwoFactorEnabled) {
             if (!dto.code) {
                 await this.twoFactorAuthService.sendTwoFactorToken(user.email)
 
-                throw new RpcException({
-                    statusCode: 401,
-                    errorCode: 'TWO_FACTOR_REQUIRED',
-                    message: 'Требуется код двухфакторной аутентификации. Проверьте почту.'
-                  });
+                throw GrpcBadRequest('Требуется код двухфакторной аутентификации. Проверьте почту.')
             }
             await this.twoFactorAuthService.validateTwoFactorToken(user.email, dto.code)
         }
-
         return user
     }
 
