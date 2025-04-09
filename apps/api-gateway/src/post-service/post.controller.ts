@@ -7,16 +7,16 @@ import { CreatePostDto } from "./dto/createPostDto";
 
 @Controller('post-service')
 export class PostController {
-    constructor(private readonly postService: PostService) {}
-    
+    constructor(private readonly postService: PostService) { }
+
     @UseGuards(AuthGuard)
     @Post('create')
     @UseInterceptors(FileInterceptor('file'))
     async createPost(@UploadedFile() file,
-    @Authorized('id') userId: string,
-    @Body() dto: CreatePostDto
-) {
-        const res = this.postService.createPost(file,userId,dto)
+        @Authorized('id') userId: string,
+        @Body() dto: CreatePostDto
+    ) {
+        const res = this.postService.createPost(file, userId, dto)
         return res
     }
 
@@ -39,5 +39,13 @@ export class PostController {
     ) {
         const res = this.postService.likePost(dto.postId, userId)
         return res
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('comment')
+    async addComment(@Body() dto: any,
+        @Authorized('id') userId: string
+    ) {
+        return this.postService.commentPost(userId,dto);
     }
 }

@@ -33,7 +33,7 @@ export class PostsController implements PostServiceController {
 
   @GrpcMethod('PostService', "CommentPost")
   commentPost(request: CommentPostDto): Promise<Post> | Observable<Post> | Post {
-    throw new Error('Method not implemented.');
+    return this.postsService.commentPost(request);
   }
 
 }
