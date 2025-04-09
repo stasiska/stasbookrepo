@@ -38,11 +38,7 @@ export class PostService {
             })) 
             return res
         } catch(err) {
-            return  {
-                message: [err.details],
-                error: "Not Found",
-                statusCode: 404
-            }
+            return err
         }
     }
 
@@ -53,11 +49,7 @@ export class PostService {
             })) 
             return res
         } catch(err) {
-            return  {
-                message: [err.details],
-                error: "Not Found",
-                statusCode: 404
-            }
+            return  err
         }
     }
 
@@ -66,11 +58,7 @@ export class PostService {
             const res = await firstValueFrom(this.postServiceClientService.likePost({userId: userId, postId: postId}))
             return res
         } catch(err){
-            return  {
-                message: [err.details],
-                error: "Not Found",
-                statusCode: 400
-            }
+            return  err
         }
     }
 
@@ -83,11 +71,7 @@ export class PostService {
             }))
             return res
         } catch(err) {
-            return  {
-                message: [err.details],
-                error: "Not Found",
-                statusCode: 400
-            }
+            return  err
         }
     }
 }

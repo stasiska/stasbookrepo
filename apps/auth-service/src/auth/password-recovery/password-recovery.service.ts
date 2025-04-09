@@ -9,7 +9,7 @@ import { hash } from 'argon2';
 import * as schema from '../../drizzle/schema/schema';
 import { and, eq } from 'drizzle-orm';
 import { NewPasswordDto } from './dto/new-password.dto';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcNotFound, GrpcRequestTimeOut } from '@lib/shared/dist';
 
 @Injectable()
 export class PasswordRecoveryService {
@@ -22,7 +22,7 @@ export class PasswordRecoveryService {
         const existingUser = await this.userService.findByEmail(dto.email)
 
         if (!existingUser) {
-            throw new RpcException(`Пользователь не найден. Пожалуйста, проверьте введенный адрес эл почты и попробуйте снова.`)
+            throw GrpcNotFound(`Пользователь не найден. Пожалуйста, проверьте введенный адрес эл почты и попробуйте снова.`)
         }
 
         const passwordResetToken = await this.generatePasswordResetToken(existingUser.email)
@@ -41,7 +41,7 @@ export class PasswordRecoveryService {
         ))
 
         if (!existingToken[0]) {
-            throw new RpcException(
+            throw GrpcNotFound(
                 'Токен не найден. Пожалуйста, проверьте правильность введенного токена или запросите новый.'
             )
         }
@@ -49,7 +49,7 @@ export class PasswordRecoveryService {
         const hasExpired = new Date(existingToken[0].expiresIn) < new Date()
 
         if (hasExpired) {
-            throw new RpcException(
+            throw GrpcRequestTimeOut(
                 'Токен истек. Пожалуйста, запросите новый токен для подтверждения сброса пароля.'
             )
         }
@@ -57,7 +57,7 @@ export class PasswordRecoveryService {
         const existingUser = await this.userService.findByEmail(existingToken[0].email)
 
         if (!existingUser) {
-            throw new RpcException(
+            throw GrpcNotFound(
                 'Пользователь не найден. Пожалуйста, проверьте введенный адрес электронной почты и попробуйте снова.'
             )
         }

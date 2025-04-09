@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 import { RegisterDto } from './dto/register.dto';
 //import { LoginDto } from './dto/login.dto';
 import { AuthProviderGuard } from './guards/provider.guard';
-import { GrpcMethod, GrpcService, MessagePattern, RpcException } from '@nestjs/microservices';
+import { GrpcMethod, GrpcService, MessagePattern } from '@nestjs/microservices';
 import { ConfirmationDto } from './email-confirmation/dto/confirmation.dto';
 import { RolesGuard } from './guards/roles.guard';
 import { Authorization } from './decorators/auth.decorator';
@@ -14,6 +14,7 @@ import { AuthServiceController, Boolean, emailConfirmationDto, Empty, FindOneUse
 import { Observable } from 'rxjs';
 import { EmailConfirmationService } from './email-confirmation/email-confirmation.service';
 import { PasswordRecoveryService } from './password-recovery/password-recovery.service';
+import { GrpcNotFound } from '@lib/shared/dist';
 
 //@Controller('auth')
 @GrpcService()
@@ -65,7 +66,7 @@ export class AuthController implements AuthServiceController{
   @GrpcMethod('AuthService', 'OauthCallback')
   async oauthCallback(request: OauthCallbackDto): Promise<OauthCallbackRes> {
     if (!request.code) {
-          throw new RpcException('Не был предоставлен код авторизации.')
+          throw GrpcNotFound('Не был предоставлен код авторизации.')
         }
 
       const user = await this.authService.extractProfileFromCode(request.provider,request.code)

@@ -1,4 +1,4 @@
-import { RegisterDto } from "../../auth-service/dto/register.dto";
+import { RegisterDto } from "../../auth2/dto/register.dto";
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 
 @ValidatorConstraint({name: 'IsPasswordsMatching', async: false})

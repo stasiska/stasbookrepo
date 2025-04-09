@@ -3,8 +3,8 @@ import { S3Service } from '@lib/s3/dist/index';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto } from '@lib/grpc/dist/typings/post_service';
 import { MediaType } from 'prisma/__generated__';
-import { RpcException } from '@nestjs/microservices';
 import { mapPost } from 'src/libs/mapper/post.mapper';
+import { GrpcConflict, GrpcNotFound } from '@lib/shared/dist/index';
 @Injectable()
 export class PostsService {
 
@@ -55,7 +55,7 @@ export class PostsService {
         })
 
         if (!post) {
-            throw new RpcException(`Post with id ${request.postId} not found`)
+            throw GrpcNotFound(`Post with id ${request.postId} not found`)
         }
         return mapPost(post)
     }
@@ -74,7 +74,7 @@ export class PostsService {
         })
 
         if (!post) {
-            throw new RpcException(`Post with id ${request.authorId} not found`)
+            throw GrpcNotFound(`Post with id ${request.authorId} not found`)
         }
         return {posts: [mapPost(post)]}
     }
@@ -88,7 +88,7 @@ export class PostsService {
             }
         })
         if (existLike) {
-            throw new RpcException("Вы уже лайкали ранее")
+            throw GrpcConflict("Вы уже лайкали ранее")
         }
         const doLike = await this.prismaService.like.create({
             data: {
@@ -112,7 +112,15 @@ export class PostsService {
     }
 
     async commentPost(request: CommentPostDto) {
-        const doComment = await this.prismaService.comment.create({
+        const postExist = await this.prismaService.post.findUnique({
+            where: {
+                id: request.postId
+            }
+        })
+        if (!postExist) {
+            throw GrpcNotFound(`Post with id ${request.postId} not found`)
+        }
+        await this.prismaService.comment.create({
             data: {
                 userId: request.userId,
                 postId: request.postId,
