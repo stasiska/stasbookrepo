@@ -13,6 +13,7 @@ import * as schema from '../drizzle/schema/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service';
 import { GrpcBadRequest, GrpcConflict, GrpcNotFound } from '@lib/shared/dist';
+import { LoggerService } from '@lib/logger/dist';
 
 
 @Injectable()
@@ -24,6 +25,7 @@ export class AuthService {
         private readonly provderSerivce: ProviderService,
         private readonly emailConfirmationService: EmailConfirmationService,
         private readonly twoFactorAuthService: TwoFactorAuthService,
+        private readonly logger: LoggerService
     ) { }
 
     
@@ -31,6 +33,11 @@ export class AuthService {
         const isExists = await this.userService.findByEmail(dto.email)
 
         if (isExists) {
+            this.logger.error(`ALREADY EXISTS`, `${{
+                userId: dto.email,
+                message: `USER with email ${dto.email} `,
+                timeStamp: new Date().toISOString(),
+            }}`, "AuthService")
             throw GrpcConflict("пользователь уже существует")
         }
 
@@ -52,6 +59,11 @@ export class AuthService {
     public async login(dto) {
         const user = await this.userService.findByEmail(dto.email)
         if (!user || !user.password) {
+            this.logger.error(`NOT FOUND`, `${{
+                userId: dto.email,
+                message: `USER with email ${dto.email} `,
+                timeStamp: new Date().toISOString(),
+            }}`, "AuthService")
             throw GrpcNotFound('Пользователь не найден')
         }
 
@@ -143,6 +155,10 @@ export class AuthService {
 
             req.session.save(err => {
                 if (err) {
+                    this.logger.error(`ALREADY EXISTS`, `${{
+                        message: `error save session `,
+                        timeStamp: new Date().toISOString(),
+                    }}`, "AuthService")
                     new InternalServerErrorException('не удалось сохранить сессию')
                 }
                 resolve({

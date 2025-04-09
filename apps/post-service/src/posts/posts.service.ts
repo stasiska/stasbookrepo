@@ -5,10 +5,13 @@ import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, Like
 import { MediaType } from 'prisma/__generated__';
 import { mapPost } from 'src/libs/mapper/post.mapper';
 import { GrpcConflict, GrpcNotFound } from '@lib/shared/dist/index';
+import { LoggerService } from '@lib/logger/dist';
 @Injectable()
 export class PostsService {
 
-    public constructor(private prismaService: PrismaService){}
+    public constructor(private prismaService: PrismaService,
+    private readonly logger: LoggerService
+    ){}
 
     async createPost (request: CreatePostDto) {
 
@@ -55,6 +58,7 @@ export class PostsService {
         })
 
         if (!post) {
+            this.logger.error(`Post with id ${request.postId} not found`, ' ', "PostService")
             throw GrpcNotFound(`Post with id ${request.postId} not found`)
         }
         return mapPost(post)
@@ -74,6 +78,11 @@ export class PostsService {
         })
 
         if (!post) {
+            this.logger.error(`ALREADY EXISTS`, `${{
+                userId: request.authorId,
+                message: `Post with id ${request.authorId} not found`,
+                timeStamp: new Date().toISOString(),
+            }}`, "PostService")
             throw GrpcNotFound(`Post with id ${request.authorId} not found`)
         }
         return {posts: [mapPost(post)]}
@@ -118,6 +127,11 @@ export class PostsService {
             }
         })
         if (!postExist) {
+            this.logger.error(`GET fetch failed`, `${{
+                postId: request.postId,
+                message: `Post with id ${request.postId} not found`,
+                timeStamp: new Date().toISOString(),
+            }}`, "PostService")
             throw GrpcNotFound(`Post with id ${request.postId} not found`)
         }
         await this.prismaService.comment.create({

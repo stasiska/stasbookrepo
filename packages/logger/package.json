@@ -1,0 +1,22 @@
+{
+  "name": "@lib/logger",
+  "version": "0.0.1",
+  "main": "dist/index",
+  "types": "src/index",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "nest build"
+  },
+  "dependencies": {
+    "nestjs-pino": "^4.0.0",
+    "pino": "^8.0.0",
+    "pino-http": "^8.0.0",
+    "pino-pretty": "^9.0.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=10.2.0",
+    "@nestjs/core": ">=10.2.0"
+  }
+}

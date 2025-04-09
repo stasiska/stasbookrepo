@@ -19,7 +19,7 @@ export class GrpcExceptionFilter implements RpcExceptionFilter<RpcException> {
       : { message: error };
 
     // логируем в консоль
-    this.logger.warn(`gRPC Error: ${JSON.stringify(formattedError)}`);
+    this.logger.error(`gRPC Error: ${JSON.stringify(formattedError)}`);
 
     return throwError(() => formattedError);
   }

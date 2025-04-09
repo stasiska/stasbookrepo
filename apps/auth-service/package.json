@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@lib/shared": "0.0.1",
+    "@lib/logger": "0.0.1",
     "@lib/grpc": "0.0.1",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",

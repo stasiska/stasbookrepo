@@ -7,13 +7,14 @@ import { EmailConfirmationModule } from './auth/email-confirmation/email-confirm
 import { MailModule } from './libs/mail/mail.module';
 import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module';
 import { PasswordRecoveryModule } from './auth/password-recovery/password-recovery.module';
+import { LoggerModule } from '@lib/logger/dist';
 
 @Module({
   imports: [
     
     ConfigModule.forRoot({
     isGlobal: true,
-  }), DrizzleModule, AuthModule, UserModule, EmailConfirmationModule, MailModule, TwoFactorAuthModule, PasswordRecoveryModule],
+  }), LoggerModule, DrizzleModule, AuthModule, UserModule, EmailConfirmationModule, MailModule, TwoFactorAuthModule, PasswordRecoveryModule],
  
 })
 export class AppModule {}
