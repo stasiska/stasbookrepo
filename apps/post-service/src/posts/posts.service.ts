@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { S3Service } from '@lib/s3/dist/index';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto } from '@lib/grpc/dist/typings/post_service';
+import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto } from '@lib/grpc/dist/typings/post_service';
 import { MediaType } from 'prisma/__generated__';
 import { RpcException } from '@nestjs/microservices';
 import { mapPost } from 'src/libs/mapper/post.mapper';
@@ -109,5 +109,28 @@ export class PostsService {
         })
         
         return mapPost(likePost);
+    }
+
+    async commentPost(request: CommentPostDto) {
+        const doComment = await this.prismaService.comment.create({
+            data: {
+                userId: request.userId,
+                postId: request.postId,
+                text: request.text
+            }
+        })
+
+        const post = await this.prismaService.post.findFirst({
+            where: {
+                id: request.postId
+            } ,
+            include: {
+                comments: true,
+                likes: true,
+                medias: true
+            }
+        });
+
+        return mapPost(post);
     }
 }

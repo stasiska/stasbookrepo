@@ -73,4 +73,21 @@ export class PostService {
             }
         }
     }
+
+    async commentPost(userId: string, dto){
+        try {
+            const res = await firstValueFrom(this.postServiceClientService.commentPost({
+                userId: userId,
+                postId: dto.postId,
+                text: dto.text
+            }))
+            return res
+        } catch(err) {
+            return  {
+                message: [err.details],
+                error: "Not Found",
+                statusCode: 400
+            }
+        }
+    }
 }
