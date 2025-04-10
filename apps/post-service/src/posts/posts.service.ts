@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { S3Service } from '@lib/s3/dist/index';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto } from '@lib/grpc/dist/typings/post_service';
+import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, PaginationDto, Post, Posts } from '@lib/grpc/dist/typings/post_service';
 import { MediaType } from 'prisma/__generated__';
-import { mapPost } from 'src/libs/mapper/post.mapper';
+import { mapManyPosts, mapPost } from 'src/libs/mapper/post.mapper';
 import { GrpcConflict, GrpcNotFound } from '@lib/shared/dist/index';
 import { LoggerService } from '@lib/logger/dist';
+import { CacheService } from '@lib/cache/dist/cache.service'
 @Injectable()
 export class PostsService {
 
     public constructor(private prismaService: PrismaService,
-    private readonly logger: LoggerService
+    private readonly logger: LoggerService,
+    private readonly cacheService: CacheService
     ){}
 
     async createPost (request: CreatePostDto) {
@@ -46,6 +48,12 @@ export class PostsService {
     }
 
     async getPostById (request: GetPostByIdDto){
+
+        const postFromCache: Post = await this.cacheService.get(request.postId)
+        if (postFromCache) {
+            console.log('hello from redis')
+            return postFromCache;
+        }
         const post = await this.prismaService.post.findUnique({
             where: {
                 id: request.postId
@@ -61,14 +69,16 @@ export class PostsService {
             this.logger.error(`Post with id ${request.postId} not found`, ' ', "PostService")
             throw GrpcNotFound(`Post with id ${request.postId} not found`)
         }
+        const cachedPost = await this.cacheService.set(request.postId, JSON.stringify(mapPost(post)))
         return mapPost(post)
     }
 
 
     async getPostByUserId(request: GetPostByUserIdDto) {
-        const post = await this.prismaService.post.findUnique({
+        console.log(request)
+        const post = await this.prismaService.post.findMany({
             where: {
-                id: request.authorId
+                authorId: request.authorId
             },
             include: {
                 medias: true,
@@ -78,14 +88,14 @@ export class PostsService {
         })
 
         if (!post) {
-            this.logger.error(`ALREADY EXISTS`, `${{
+            this.logger.error(`NOT FOUND`, `${{
                 userId: request.authorId,
                 message: `Post with id ${request.authorId} not found`,
                 timeStamp: new Date().toISOString(),
             }}`, "PostService")
             throw GrpcNotFound(`Post with id ${request.authorId} not found`)
         }
-        return {posts: [mapPost(post)]}
+        return {posts: mapManyPosts(post)}
     }
 
     async likePost(request: LikePostDto) {
@@ -97,7 +107,24 @@ export class PostsService {
             }
         })
         if (existLike) {
-            throw GrpcConflict("Вы уже лайкали ранее")
+            const deleteLike = await this.prismaService.like.delete({
+                where: {
+                    id: existLike.id
+                }
+            })
+
+            const likePost = await this.prismaService.post.findUnique({
+                where : {
+                    id: request.postId
+                },
+                include: {
+                    likes: true,
+                    comments: true,
+                    medias: true
+                }
+            })
+
+            return mapPost(likePost)
         }
         const doLike = await this.prismaService.like.create({
             data: {
@@ -149,10 +176,32 @@ export class PostsService {
             include: {
                 comments: true,
                 likes: true,
-                medias: true
+                medias: true,
             }
         });
 
         return mapPost(post);
+    }
+
+    async getAllPosts(request: PaginationDto) {
+        
+        const cachedPosts: Post[] =  await this.cacheService.get('listFirstPosts')
+        
+        if (cachedPosts) {
+            return {posts: cachedPosts}
+        }
+ 
+        const posts = await this.prismaService.post.findMany({
+            skip: (request.page - 1) * request.size,
+            take: request.size,
+            include: {
+                comments: true,
+                likes: true,
+                medias: true,
+            }
+        })
+        const mappedPosts = mapManyPosts(posts)
+        await this.cacheService.addListFirstPosts(JSON.stringify(mappedPosts))
+        return {posts: mapManyPosts(posts)}
     }
 }

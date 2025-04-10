@@ -1,5 +1,5 @@
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
-import { CommentPostDto, CreateMediaDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, Media, Post, POST_SERVICE_NAME, POST_SERVICE_PACKAGE_NAME, Posts, PostServiceClient } from "../typings/post_service";
+import { CommentPostDto, CreateMediaDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, Media, PaginationDto, Post, POST_SERVICE_NAME, POST_SERVICE_PACKAGE_NAME, Posts, PostServiceClient } from "../typings/post_service";
 import { ClientGrpc } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
@@ -8,6 +8,9 @@ export class PostServiceClientService implements PostServiceClient, OnModuleInit
     private postServiceClient: PostServiceClient
     
     constructor(@Inject(POST_SERVICE_PACKAGE_NAME) private client: ClientGrpc) {}
+    getAllPosts(request: PaginationDto): Observable<Posts> {
+        return this.postServiceClient.getAllPosts(request);
+    }
     createMedia(request: CreateMediaDto): Observable<Media> {
         return this.postServiceClient.createMedia(request);
     }

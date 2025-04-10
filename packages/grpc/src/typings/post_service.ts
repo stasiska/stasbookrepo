@@ -10,6 +10,11 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "post_service";
 
+export interface PaginationDto {
+  page: number;
+  size: number;
+}
+
 export interface CreateMediaDto {
   url: string;
   type: string;
@@ -82,6 +87,8 @@ export const POST_SERVICE_PACKAGE_NAME = "post_service";
 export interface PostServiceClient {
   createPost(request: CreatePostDto): Observable<Post>;
 
+  getAllPosts(request: PaginationDto): Observable<Posts>;
+
   getPostById(request: GetPostByIdDto): Observable<Post>;
 
   getPostByUserId(request: GetPostByUserIdDto): Observable<Posts>;
@@ -95,6 +102,8 @@ export interface PostServiceClient {
 
 export interface PostServiceController {
   createPost(request: CreatePostDto): Promise<Post> | Observable<Post> | Post;
+
+  getAllPosts(request: PaginationDto): Promise<Posts> | Observable<Posts> | Posts;
 
   getPostById(request: GetPostByIdDto): Promise<Post> | Observable<Post> | Post;
 
@@ -111,6 +120,7 @@ export function PostServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
       "createPost",
+      "getAllPosts",
       "getPostById",
       "getPostByUserId",
       "likePost",

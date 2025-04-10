@@ -12,7 +12,6 @@ import { parseBoolean } from './libs/common/utils/parse-boolean.util';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
-  console.log(config.getOrThrow<string>('AUTH_SERVICE_URL'))
   const redis = new IORedis(`redis://${config.getOrThrow<string>('REDIS_USER')}:${config.getOrThrow<string>('REDIS_PASSWORD')}@${config.getOrThrow<string>('REDIS_HOST')}:${config.getOrThrow<number>('REDIS_PORT')}`)
 
   
