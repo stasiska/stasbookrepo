@@ -32,12 +32,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.5.0
- * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
+ * Prisma Client JS version: 6.6.0
+ * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
  */
 Prisma.prismaVersion = {
-  client: "6.5.0",
-  engine: "173f8d54f8d52e692c7e27e72a88314ec7aeff60"
+  client: "6.6.0",
+  engine: "f676762280b54cd07c770017ed3711ddde35f37a"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -177,8 +177,8 @@ const config = {
     "schemaEnvPath": "../../.env"
   },
   "relativePath": "..",
-  "clientVersion": "6.5.0",
-  "engineVersion": "173f8d54f8d52e692c7e27e72a88314ec7aeff60",
+  "clientVersion": "6.6.0",
+  "engineVersion": "f676762280b54cd07c770017ed3711ddde35f37a",
   "datasourceNames": [
     "db"
   ],
@@ -187,12 +187,12 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "POSTGRES_URI",
-        "value": null
+        "value": "postgresql://root:1234@localhost:5433/stasbookposts"
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./__generated__\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"POSTGRES_URI\")\n}\n\nmodel Post {\n  id      String @id @default(uuid())\n  content String\n\n  medias   Media[]\n  likes    Like[]\n  comments Comment[]\n\n  authorId  String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"posts\")\n}\n\nmodel Comment {\n  id String @id @default(uuid())\n\n  postId String @map(\"post_id\")\n  posts  Post?  @relation(fields: [postId], references: [id])\n\n  userId String @map(\"user_id\")\n  text   String\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n\n  @@map(\"comments\")\n}\n\nmodel Media {\n  id     String    @id @default(uuid())\n  url    String\n  post   Post?     @relation(fields: [postId], references: [id])\n  postId String?   @map(\"post_id\")\n  type   MediaType\n\n  @@map(\"media\")\n}\n\nmodel Like {\n  id        String   @id @default(uuid())\n  postId    String   @map(\"post_id\")\n  posts     Post?    @relation(fields: [postId], references: [id])\n  userId    String   @map(\"user_id\")\n  createdAt DateTime @default(now()) @map(\"created_at\")\n\n  @@map(\"likes\")\n}\n\nenum MediaType {\n  VIDEO\n  IMAGE\n}\n",
-  "inlineSchemaHash": "fd483b4a493a677a5d4c5cac0d90d2c845ae252cfa4c11ed36e04fef2254807b",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./__generated__\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"POSTGRES_URI\")\n}\n\nmodel Post {\n  id      String @id @default(uuid())\n  content String\n\n  medias   Media[]\n  likes    Like[]\n  comments Comment[]\n\n  authorId  String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@index([authorId])\n  @@map(\"posts\")\n}\n\nmodel Comment {\n  id String @id @default(uuid())\n\n  postId String @map(\"post_id\")\n  posts  Post?  @relation(fields: [postId], references: [id])\n\n  userId String @map(\"user_id\")\n  text   String\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n\n  @@index([postId])\n  @@index([userId])\n  @@map(\"comments\")\n}\n\nmodel Media {\n  id     String    @id @default(uuid())\n  url    String\n  post   Post?     @relation(fields: [postId], references: [id])\n  postId String?   @map(\"post_id\")\n  type   MediaType\n\n  @@map(\"media\")\n}\n\nmodel Like {\n  id        String   @id @default(uuid())\n  postId    String   @map(\"post_id\")\n  posts     Post?    @relation(fields: [postId], references: [id])\n  userId    String   @map(\"user_id\")\n  createdAt DateTime @default(now()) @map(\"created_at\")\n\n  @@map(\"likes\")\n}\n\nenum MediaType {\n  VIDEO\n  IMAGE\n}\n",
+  "inlineSchemaHash": "a76b8d4b7aaf1f50555eb0fff1eb86143e702abbb95ca08fbe786a4b55a93cc6",
   "copyEngine": true
 }
 config.dirname = '/'

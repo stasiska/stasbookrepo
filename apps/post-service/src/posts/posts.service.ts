@@ -3,7 +3,7 @@ import { S3Service } from '@lib/s3/dist/index';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto } from '@lib/grpc/dist/typings/post_service';
 import { MediaType } from 'prisma/__generated__';
-import { mapPost } from 'src/libs/mapper/post.mapper';
+import { mapManyPosts, mapPost } from 'src/libs/mapper/post.mapper';
 import { GrpcConflict, GrpcNotFound } from '@lib/shared/dist/index';
 import { LoggerService } from '@lib/logger/dist';
 @Injectable()
@@ -66,9 +66,10 @@ export class PostsService {
 
 
     async getPostByUserId(request: GetPostByUserIdDto) {
-        const post = await this.prismaService.post.findUnique({
+        console.log(request)
+        const post = await this.prismaService.post.findMany({
             where: {
-                id: request.authorId
+                authorId: request.authorId
             },
             include: {
                 medias: true,
@@ -78,14 +79,14 @@ export class PostsService {
         })
 
         if (!post) {
-            this.logger.error(`ALREADY EXISTS`, `${{
+            this.logger.error(`NOT FOUND`, `${{
                 userId: request.authorId,
                 message: `Post with id ${request.authorId} not found`,
                 timeStamp: new Date().toISOString(),
             }}`, "PostService")
             throw GrpcNotFound(`Post with id ${request.authorId} not found`)
         }
-        return {posts: [mapPost(post)]}
+        return {posts: mapManyPosts(post)}
     }
 
     async likePost(request: LikePostDto) {
@@ -97,7 +98,24 @@ export class PostsService {
             }
         })
         if (existLike) {
-            throw GrpcConflict("Вы уже лайкали ранее")
+            const deleteLike = await this.prismaService.like.delete({
+                where: {
+                    id: existLike.id
+                }
+            })
+
+            const likePost = await this.prismaService.post.findUnique({
+                where : {
+                    id: request.postId
+                },
+                include: {
+                    likes: true,
+                    comments: true,
+                    medias: true
+                }
+            })
+
+            return mapPost(likePost)
         }
         const doLike = await this.prismaService.like.create({
             data: {

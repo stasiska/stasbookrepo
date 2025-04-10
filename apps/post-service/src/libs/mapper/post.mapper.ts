@@ -47,4 +47,14 @@ export function mapPost(post: Post & {
         createdAt: toIso(post.createdAt),
         updatedAt: toIso(post.updatedAt)
     }
+
+    
 } 
+
+export function mapManyPosts(posts: (Post & {
+    medias?: Media[],
+    likes?: Like[],
+    comments?: Comment[]
+  })[]): GrpcPost[] {
+    return posts.map(mapPost);
+  }

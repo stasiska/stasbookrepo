@@ -273,8 +273,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.5.0
-   * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
+   * Prisma Client JS version: 6.6.0
+   * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
    */
   export type PrismaVersion = {
     client: string
@@ -1848,7 +1848,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Post model
-   */ 
+   */
   interface PostFieldRefs {
     readonly id: FieldRef<"Post", 'String'>
     readonly content: FieldRef<"Post", 'String'>
@@ -2970,7 +2970,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Comment model
-   */ 
+   */
   interface CommentFieldRefs {
     readonly id: FieldRef<"Comment", 'String'>
     readonly postId: FieldRef<"Comment", 'String'>
@@ -4035,7 +4035,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Media model
-   */ 
+   */
   interface MediaFieldRefs {
     readonly id: FieldRef<"Media", 'String'>
     readonly url: FieldRef<"Media", 'String'>
@@ -5099,7 +5099,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Like model
-   */ 
+   */
   interface LikeFieldRefs {
     readonly id: FieldRef<"Like", 'String'>
     readonly postId: FieldRef<"Like", 'String'>
@@ -5619,7 +5619,7 @@ export namespace Prisma {
 
 
   /**
-   * Field references 
+   * Field references
    */
 
 
