@@ -5,11 +5,17 @@ package post_service;
 
 service PostService {
     rpc CreatePost(CreatePostDto) returns (Post);
+    rpc GetAllPosts(PaginationDto) returns (Posts);
     rpc GetPostById(GetPostByIdDto) returns (Post);
     rpc GetPostByUserId(GetPostByUserIdDto) returns (Posts);
     rpc LikePost(LikePostDto) returns (Post);
     rpc CommentPost(CommentPostDto) returns (Post);
     rpc CreateMedia(CreateMediaDto) returns (Media);
+}
+
+message PaginationDto {
+    int32 page = 1;
+    int32 size = 2; 
 }
 
 message CreateMediaDto {

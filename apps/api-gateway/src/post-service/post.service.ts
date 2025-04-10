@@ -11,6 +11,17 @@ export class PostService {
         private readonly config: ConfigService
     ) {}
 
+    async getAllPosts(page: number, size: number) {
+        try {
+            const res = await firstValueFrom(this.postServiceClientService.getAllPosts({page: page ? page : 1 , size: size ? size : 7})) 
+            return res
+        } catch(err) {
+            return err
+        }
+
+
+    }
+
     async createPost(file,userId: string, dto: CreatePostDto) {
         const s3 = new S3Service({
             endpoint: this.config.getOrThrow('S3_ENDPOINT'),

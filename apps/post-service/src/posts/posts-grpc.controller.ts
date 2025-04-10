@@ -1,12 +1,17 @@
 import { Controller, UseFilters } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CommentPostDto, CreateMediaDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, Media, Post, Posts, PostServiceController } from '@lib/grpc/dist/typings/post_service';
+import { CommentPostDto, CreateMediaDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, Media, PaginationDto, Post, Posts, PostServiceController } from '@lib/grpc/dist/typings/post_service';
 import { Observable } from 'rxjs';
 import { GrpcMethod, GrpcService } from '@nestjs/microservices';
 
 @GrpcService()
 export class PostsController implements PostServiceController {
   constructor(private readonly postsService: PostsService) {}
+  
+  @GrpcMethod('PostService', "GetAllPosts")
+  getAllPosts(request: PaginationDto): Promise<Posts> | Observable<Posts> | Posts {
+    return this.postsService.getAllPosts(request);
+  } 
   createMedia(request: CreateMediaDto): Promise<Media> | Observable<Media> | Media {
     throw new Error('Method not implemented.');
   }

@@ -1,8 +1,25 @@
-import {CacheModule, Module, Global } from '@nestjs/common';
-import { default as IORedis } from 'ioredis'
-import RedisStore from 'connect-redis';
+// shared-cache.module.ts
+import { Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { CacheService } from './cache.service';
+import { redisStore } from 'cache-manager-redis-store';
 
-@Global()
 @Module({
-    CacheModule
+  imports: [
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: await redisStore({
+          socket: {
+            host: process.env.REDIS_HOST || 'localhost',
+            port: parseInt(process.env.REDIS_PORT || '6379'),
+          },
+          ttl: 60 * 5 * 60,
+        }),
+      }),
+      isGlobal: true,
+    }),
+  ],
+  providers: [CacheService],
+  exports: [CacheService],
 })
+export class SharedCacheModule {}

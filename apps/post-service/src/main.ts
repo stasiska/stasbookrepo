@@ -9,7 +9,6 @@ async function bootstrap() {
   
   const config = new ConfigService()
   app.useGlobalFilters(new GrpcExceptionFilter())
-  //console.log(process.env.CHECK)
   console.log('started on port localhost:55013')
   await app.listen();
 }

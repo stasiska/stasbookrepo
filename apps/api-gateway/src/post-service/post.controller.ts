@@ -44,6 +44,13 @@ export class PostController {
     async addComment(@Body() dto: any,
         @Authorized('id') userId: string
     ) {
-        return this.postService.commentPost(userId,dto);
+        return this.postService.commentPost(userId, dto);
+    }
+
+    @Get()
+    async getAllPosts(@Query('limit') limit?: number,
+        @Query('page') page?: number,
+    ) {
+        return this.postService.getAllPosts(page,limit)
     }
 }
