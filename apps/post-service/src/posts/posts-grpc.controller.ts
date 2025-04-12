@@ -1,4 +1,3 @@
-import { Controller, UseFilters } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CommentPostDto, CreateMediaDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, Media, PaginationDto, Post, Posts, PostServiceController } from '@lib/grpc/dist/typings/post_service';
 import { Observable } from 'rxjs';

@@ -1,0 +1,12 @@
+{
+  "name": "@lib/queue",
+  "version": "0.0.1",
+  "main": "dist/index",
+  "types": "src/index",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "nest build"
+  }
+}

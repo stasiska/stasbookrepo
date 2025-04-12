@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package social_service;
+
+service SocialService {
+    rpc Follow(FollowDto) returns (FollowRes);
+    rpc UnFollow(FollowDto) returns (FollowRes);
+    rpc AddFriend(FriendDto) returns (FriendRes);
+    rpc RemoveFriend(FriendDto) returns (FriendRes);
+    rpc CreateGroup (CreateGroupDto) returns (GroupRes);
+    rpc JoinGroup(GroupActionDto) returns (GroupRes);
+    rpc LeaveGroup(GroupActionDto) returns (GroupRes);
+    rpc GetUserFriends(UserIdReq) returns (UserList);
+    rpc GetUserFollowers(UserIdReq) returns (UserList);
+    rpc GetUserGroups(UserIdReq) returns (GroupList);
+}
+
+message UserIdReq {
+    string userId = 1;
+}
+
+message FriendRes {
+    string status = 1;
+  }
+
+message FollowRes {
+    string status = 1;
+}
+
+message FollowDto {
+    string fromUserId = 1;
+    string toUserId = 2;
+}
+
+message FriendDto {
+    string requesterId = 1;
+    string targetId = 2;
+}
+
+message CreateGroupDto {
+    string ownerId = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message GroupActionDto {
+    string userId = 1;
+    string groupId = 2;
+}
+
+message GroupRes {
+    string groupId = 1;
+    string status = 2;
+}
+
+message UserList {
+    repeated string userIds = 1;
+}
+
+message GroupList {
+    repeated Group groupList = 1;
+}
+
+message Group {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string ownerId = 4;
+}
+
