@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./__generated__"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Follow {
+  id         String @id @default(uuid())
+  followerId String
+  followOnId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("follows")
+}
+
+model Friend {
+  id          String @id @default(uuid())
+  requesterId String
+  targetId    String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  accepted  Boolean  @default(false)
+
+  @@map("friends")
+}
+
+model Group {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  ownerId     String
+
+  members GroupMember[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("groups")
+}
+
+model GroupMember {
+  id String @id @default(uuid())
+
+  userId String
+
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String
+
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  @@map("groupMembers")
+}

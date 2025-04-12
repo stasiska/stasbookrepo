@@ -7,7 +7,6 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,postServiceGrpcServerOptions);
   
-  const config = new ConfigService()
   app.useGlobalFilters(new GrpcExceptionFilter())
   console.log('started on port localhost:55013')
   await app.listen();
