@@ -17,5 +17,5 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
     },
-    "include": ["src"]
+    "include": ["src", "src/typings/social_service.ts"]
   }

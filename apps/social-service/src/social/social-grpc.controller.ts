@@ -1,4 +1,4 @@
-import { CreateGroupDto, FollowDto, FollowRes, FriendDto, FriendRes, GroupActionDto, GroupList, GroupRes, SocialServiceController, UserIdReq, UserList } from '@lib/grpc/dist/typings/social_service';
+import { AuthorIdDto, CreateGroupDto, EmptyRes, FollowDto, FollowRes, FriendDto, FriendRes, GroupActionDto, GroupList, GroupRes, SocialServiceController, UserIdReq, UserList } from '@lib/grpc/dist/typings/social_service';
 import { SocialService } from './social.service';
 import { GrpcMethod, GrpcService } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
@@ -7,6 +7,11 @@ import { Observable } from 'rxjs';
 @GrpcService()
 export class SocialController implements SocialServiceController {
   constructor(private readonly socialService: SocialService) {}
+
+  @GrpcMethod('SocialService', "SendUserIdForNotification")
+  sendUserIdForNotification(request: UserIdReq): Promise<UserList> | Observable<UserList> | UserList {
+    return this.socialService.ExistFriendOrFollow(request);
+  }
   
   @GrpcMethod('SocialService', "Follow")
   follow(request: FollowDto): Promise<FollowRes> | Observable<FollowRes> | FollowRes {
@@ -45,7 +50,7 @@ export class SocialController implements SocialServiceController {
 
   @GrpcMethod('SocialService', "GetUserFriends")
   getUserFriends(request: UserIdReq): Promise<UserList> | Observable<UserList> | UserList {
-    throw new Error('Method not implemented.');
+    return this.socialService.ExistFriendOrFollow(request);
   }
 
   @GrpcMethod('SocialService', "GetUserFollowers")

@@ -13,6 +13,13 @@ service SocialService {
     rpc GetUserFriends(UserIdReq) returns (UserList);
     rpc GetUserFollowers(UserIdReq) returns (UserList);
     rpc GetUserGroups(UserIdReq) returns (GroupList);
+    rpc SendUserIdForNotification(UserIdReq) returns (UserList);
+}
+
+message EmptyRes {}
+
+message AuthorIdDto {
+    string authorId = 1;
 }
 
 message UserIdReq {
@@ -54,7 +61,8 @@ message GroupRes {
 }
 
 message UserList {
-    repeated string userIds = 1;
+    string authorId = 1;
+    repeated string userIds = 2;
 }
 
 message GroupList {

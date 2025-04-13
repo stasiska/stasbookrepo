@@ -10,6 +10,13 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "social_service";
 
+export interface EmptyRes {
+}
+
+export interface AuthorIdDto {
+  authorId: string;
+}
+
 export interface UserIdReq {
   userId: string;
 }
@@ -49,6 +56,7 @@ export interface GroupRes {
 }
 
 export interface UserList {
+  authorId: string;
   userIds: string[];
 }
 
@@ -85,6 +93,8 @@ export interface SocialServiceClient {
   getUserFollowers(request: UserIdReq): Observable<UserList>;
 
   getUserGroups(request: UserIdReq): Observable<GroupList>;
+
+  sendUserIdForNotification(request: UserIdReq): Observable<UserList>;
 }
 
 export interface SocialServiceController {
@@ -107,6 +117,8 @@ export interface SocialServiceController {
   getUserFollowers(request: UserIdReq): Promise<UserList> | Observable<UserList> | UserList;
 
   getUserGroups(request: UserIdReq): Promise<GroupList> | Observable<GroupList> | GroupList;
+
+  sendUserIdForNotification(request: UserIdReq): Promise<UserList> | Observable<UserList> | UserList;
 }
 
 export function SocialServiceControllerMethods() {
@@ -122,6 +134,7 @@ export function SocialServiceControllerMethods() {
       "getUserFriends",
       "getUserFollowers",
       "getUserGroups",
+      "sendUserIdForNotification",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
