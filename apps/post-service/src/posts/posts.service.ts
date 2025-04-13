@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { S3Service } from '@lib/s3/dist/index';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CommentPostDto, CreatePostDto, GetPostByIdDto, GetPostByUserIdDto, LikePostDto, PaginationDto, Post, Posts } from '@lib/grpc/dist/typings/post_service';
@@ -6,14 +6,18 @@ import { MediaType } from 'prisma/__generated__';
 import { mapManyPosts, mapPost } from 'src/libs/mapper/post.mapper';
 import { GrpcConflict, GrpcNotFound } from '@lib/shared/dist/index';
 import { LoggerService } from '@lib/logger/dist';
-import { CacheService } from '@lib/cache/dist/cache.service'
+import { CacheService } from '@lib/cache/dist/cache.service';
+import { firstValueFrom } from 'rxjs';
+import { SocialServiceClientService } from '@lib/grpc';
+
 @Injectable()
 export class PostsService {
 
     public constructor(private prismaService: PrismaService,
     private readonly logger: LoggerService,
-    private readonly cacheService: CacheService
-    ){}
+    private readonly cacheService: CacheService,
+    private readonly sociaiServiceClient: SocialServiceClientService
+){}
 
     async createPost (request: CreatePostDto) {
 
@@ -35,6 +39,8 @@ export class PostsService {
             }
         })
 
+       await firstValueFrom(this.sociaiServiceClient.getUserFriends({userId: request.authorId}))
+        
         return {
             id: post.id,
             content: post.content,

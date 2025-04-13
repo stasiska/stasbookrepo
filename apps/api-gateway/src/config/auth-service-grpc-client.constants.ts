@@ -14,6 +14,6 @@ export const authServiceGrpcClientOptions: ClientProviderOptions = {
         },
         package: [USER_SERVICE_PACKAGE_NAME],
         protoPath: path.join(protoBufModulesPath, 'auth_service.proto'),
-        url: config.get<string>('AUTH_SERVICE_URL')
+        url: 'localhost:55011'
     }
 }

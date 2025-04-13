@@ -1,5 +1,5 @@
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
-import { CreateGroupDto, FollowDto, FollowRes, FriendDto, FriendRes, GroupActionDto, GroupList, GroupRes, SOCIAL_SERVICE_NAME, SOCIAL_SERVICE_PACKAGE_NAME, SocialServiceClient, UserIdReq, UserList } from "../typings/social_service";
+import { AuthorIdDto, CreateGroupDto, EmptyRes, FollowDto, FollowRes, FriendDto, FriendRes, GroupActionDto, GroupList, GroupRes, SOCIAL_SERVICE_NAME, SOCIAL_SERVICE_PACKAGE_NAME, SocialServiceClient, UserIdReq, UserList } from "../typings/social_service";
 import { Observable } from "rxjs";
 import { ClientGrpc } from "@nestjs/microservices";
 
@@ -8,6 +8,9 @@ export class SocialServiceClientService implements SocialServiceClient, OnModule
     private socialServiceClient: SocialServiceClient;
     
     constructor(@Inject(SOCIAL_SERVICE_PACKAGE_NAME) private client: ClientGrpc) {}
+    sendUserIdForNotification(request: UserIdReq): Observable<UserList> {
+        return this.socialServiceClient.sendUserIdForNotification(request);
+    }
 
     follow(request: FollowDto): Observable<FollowRes> {
         return this.socialServiceClient.follow(request);

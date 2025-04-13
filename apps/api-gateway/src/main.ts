@@ -52,6 +52,8 @@ async function bootstrap() {
   const port = config.getOrThrow<number>('APPLICATION_PORT');
   await app.listen(port);
   console.log(`API Gateway is running on port ${port}`);
+
+  console.log(config.getOrThrow<string>('SOCIAL_SERVICE_URL'))
 }
 
 bootstrap();
