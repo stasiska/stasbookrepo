@@ -27,6 +27,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.13.2",
     "@grpc/proto-loader": "^0.7.13",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/microservices": "^10.4.15",
     "ioredis": "^5.6.0"
   }

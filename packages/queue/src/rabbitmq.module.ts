@@ -1,4 +1,3 @@
-// packages/rabbitmq/rabbitmq.module.ts
 import { Module, Global, DynamicModule } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RabbitMQService } from './rabbitmq.service';
