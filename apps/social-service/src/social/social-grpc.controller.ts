@@ -25,12 +25,12 @@ export class SocialController implements SocialServiceController {
 
   @GrpcMethod('SocialService', "AddFriend")
   addFriend(request: FriendDto): Promise<FriendRes> | Observable<FriendRes> | FriendRes {
-    throw new Error('Method not implemented.');
+    return this.socialService.addFriend(request);
   }
 
   @GrpcMethod('SocialService', "RemoveFriend")
   removeFriend(request: FriendDto): Promise<FriendRes> | Observable<FriendRes> | FriendRes {
-    throw new Error('Method not implemented.');
+    return this.socialService.removeFriend(request);
   }
 
   @GrpcMethod('SocialService', "CreateGroup")

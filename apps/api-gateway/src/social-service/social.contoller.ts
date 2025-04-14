@@ -5,7 +5,7 @@ import { Authorized } from "src/auth2/decorators/authorized.decorator";
 
 @Controller('social-service')
 export class SocialController {
-    constructor(private readonly socialService: SocialSerive) {}
+    constructor(private readonly socialService: SocialSerive) { }
 
     @UseGuards(AuthGuard)
     @Get('getFriendsById')
@@ -13,8 +13,10 @@ export class SocialController {
         return this.socialService.getFriendsById(userId)
     }
 
-    @Get()
-    async hello() {
-        return {message: "all work"}
+    @UseGuards(AuthGuard)
+    @Post('addFriend')
+    async addFriend(@Authorized('id') userId: string,
+        @Body() dto: any) {
+        return this.socialService.addFriend(userId, dto.targetId)
     }
 }
