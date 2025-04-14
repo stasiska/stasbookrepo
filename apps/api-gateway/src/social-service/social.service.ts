@@ -15,4 +15,14 @@ export class SocialSerive {
             return err
         }
     }
+
+
+    async addFriend(userId: string, targetId: any) {
+        try {
+            const res = await firstValueFrom(this.socialServiceClientService.addFriend({requesterId: userId, targetId: targetId}))
+            return res
+        } catch(err) {
+            return err
+        }
+    }
 }
