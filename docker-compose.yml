@@ -1,0 +1,207 @@
+version: '3.8'
+name: stasbook-dev
+
+x-defaults: &defaults
+  tty: true
+  init: true
+  networks:
+    - stasbook_network
+
+services:
+  # === AUTH SERVICE ===
+  auth-service:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.dev
+      args:
+        APP: auth-service
+        START_COMMAND: start:dev
+    ports:
+      - "55011:55011"
+    command: npm run --workspace=auth-service start:dev
+    volumes:
+      - ./apps/auth-service:/app/apps/auth-service
+      - /app/apps/auth-service/node_modules
+    environment:
+      - APPLICATION_PORT=55011
+      - COOKIES_SECRET=secret
+      - SESSION_SECRET=sercret
+      - SESSION_NAME=session
+      - SESSION_DOMAIN=localhost
+      - SESSION_MAX_AGE=30d
+      - SESSION_HTTP_ONLY=true
+      - SESSION_SECURE=false
+      - SESSION_FOLDER=sessions
+      - REDIS_URI=redis://:pass1234@redis:6379
+      - DATABASE_URL=postgres://root:1234@postgres-auth:5432/stasbook
+      - S3_ENDPOINT=https://s3.ru-1.storage.selcloud.ru
+      - S3_REGION=ru-7
+      - S3_ACCESS_KEY_ID=sercret
+      - S3_SECRET_ACCESS_KEY=sercret
+      - S3_BUCKET_NAME=stasbook-storage
+
+    depends_on:
+      - postgres-auth
+      - redis
+
+  # === POST SERVICE ===
+  post-service:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.dev
+      args:
+        APP: post-service
+        START_COMMAND: start:dev
+    ports:
+      - "55013:55013"
+    command: npm run --workspace=post-service start:dev
+    volumes:
+      - ./apps/post-service:/app/apps/post-service
+      - /app/apps/post-service/node_modules
+    environment:
+      - APPLICATION_PORT=55013
+      - DATABASE_URL=postgres://root:1234@postgres-post:5432/stasbookposts
+      - REDIS_URI=redis://:pass1234@redis:6379
+
+    depends_on:
+      - postgres-post
+      - redis
+
+  # === SOCIAL SERVICE ===
+  social-service:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.dev
+      args:
+        APP: social-service
+        START_COMMAND: start:dev
+    ports:
+      - "55014:55014"
+    command: npm run --workspace=social-service start:dev
+    volumes:
+      - ./apps/social-service:/app/apps/social-service
+      - /app/apps/social-service/node_modules
+    environment:
+      - APPLICATION_PORT=55014
+      - DATABASE_URL=postgres://root:1234@postgres-social:5432/stasbooksocial
+
+    depends_on:
+      - postgres-social
+
+  # === NOTIFICATION SERVICE ===
+  notification-service:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.dev
+      args:
+        APP: notification-service
+        START_COMMAND: start:dev
+    command: npm run --workspace=notification-service start:dev
+    volumes:
+      - ./apps/notification-service:/app/apps/notification-service
+      - /app/apps/notification-service/node_modules
+    environment:
+      - NOTIFICATION_SERVICE_URL=amqp://guest:guest@rabbitmq:5672
+
+    depends_on:
+      - rabbitmq
+
+  # === API GATEWAY ===
+  api-gateway:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.dev
+      args:
+        APP: api-gateway
+        START_COMMAND: start:dev
+    ports:
+      - "4001:4001"
+    command: npm run --workspace=api-gateway start:dev
+    volumes:
+      - ./apps/api-gateway:/app/apps/api-gateway
+      - /app/apps/api-gateway/node_modules
+    environment:
+      - APPLICATION_PORT=4001
+      - AUTH_SERVICE_URL=http://auth-service:55011
+      - POST_SERVICE_URL=http://post-service:55013
+      - SOCIAL_SERVICE_URL=http://social-service:55014
+      - NOTIFICATION_SERVICE_URL=amqp://guest:guest@rabbitmq:5672
+
+    depends_on:
+      - auth-service
+      - post-service
+      - social-service
+      - notification-service
+
+  # === REDIS ===
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: pass1234
+    command: ["redis-server", "--requirepass", "pass1234"]
+
+  # === RABBITMQ ===
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # === MAILHOG ===
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  # === POSTGRES INSTANCES ===
+  postgres-auth:
+    image: postgres:15
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: stasbook
+    volumes:
+      - pgdata-auth:/var/lib/postgresql/data
+
+  postgres-post:
+    image: postgres:15
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: stasbookposts
+    volumes:
+      - pgdata-post:/var/lib/postgresql/data
+
+  postgres-social:
+    image: postgres:15
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: stasbooksocial
+    volumes:
+      - pgdata-social:/var/lib/postgresql/data
+
+networks:
+  stasbook_network:
+
+volumes:
+  pgdata-auth:
+  pgdata-post:
+  pgdata-social:

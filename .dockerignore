@@ -1,0 +1,12 @@
+# node_modules — обязательное!
+**/node_modules
+**/dist
+**/build
+**/.next
+**/.turbo
+**/.git
+**/.idea
+**/.vscode
+.env
+.env.*
+sessions
