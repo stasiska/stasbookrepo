@@ -1,0 +1,47 @@
+# syntax=docker/dockerfile:1.5.2
+
+FROM node:21-alpine as base
+
+# Установим нужные инструменты и turbo
+RUN apk add --no-cache bash nano python3 make g++ \
+  && npm install -g turbo
+
+#############################################
+FROM base AS pruned
+WORKDIR /app
+ARG APP
+
+COPY . .
+
+# turbo prune — только необходимые файлы для конкретного сервиса
+RUN turbo prune --scope=$APP --docker
+
+#############################################
+FROM base AS installer
+WORKDIR /app
+ARG APP
+
+# Копируем необходимое для установки зависимостей
+COPY --from=pruned /app/out/json/ ./
+COPY --from=pruned /app/out/package-lock.json ./package-lock.json
+COPY apps/${APP}/package.json /app/apps/${APP}/package.json
+
+# Установим зависимости с npm
+RUN npm ci
+
+COPY --from=pruned /app/out/full/ ./
+COPY turbo.json turbo.json
+
+# Собираем зависимости сервисов
+RUN turbo run build --no-cache --filter=${APP}^...
+
+
+#############################################
+FROM base AS runner
+WORKDIR /app
+ARG APP
+ARG START_COMMAND=dev
+
+COPY --from=installer /app ./
+
+CMD npm run --workspace=${APP} ${START_COMMAND}
