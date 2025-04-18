@@ -16,7 +16,6 @@ model Follow {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-
   @@map("follows")
 }
 
@@ -28,7 +27,8 @@ model Friend {
   createdAt DateTime @default(now()) @map("created_at")
   accepted Boolean @default(false)
 
-    @@map("friends")
+  @@unique([requesterId, targetId])
+  @@map("friends")
 }
 
 model Group {
