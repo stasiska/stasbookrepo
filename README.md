@@ -5,6 +5,7 @@
 
 # expamle .env
 
+<a href="https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png"><strong>Explore the docs »</strong></a>
 
 ```bash
 $ npm install
