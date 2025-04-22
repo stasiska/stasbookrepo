@@ -15,14 +15,27 @@
 ## Tech Stack
 
 - **Framework**: Nodejs, Nestjs. 
-- **DB**: Postgres, Redis.
+- **DB**: Postgres, Redis(Cache, Session).
 - **Transport Protocols**: Grpc, protobuff, RabbitMq.
 - **ORM**: DRIZZLE, PRISMA.
 - **Logger**: Pino.
 - **Metrics**: Grafana, Prometeus.
-- **Object Storage**: S3
-
+- **Object Storage**: S3.
+- **Auth**: Session, oauth2, mail(mailhog).
+- **Containerization**: Docker, docker-compose.
 ## Setup project
+
+# ENV
+
+[api-gateway](https://github.com/stasiska/stasbookrepo/tree/main/apps/api-gateway)
+
+[auth-service](https://github.com/stasiska/stasbookrepo/tree/main/apps/auth-service)
+
+[post-service](https://github.com/stasiska/stasbookrepo/tree/main/apps/post-service)
+
+[social-service](https://github.com/stasiska/stasbookrepo/tree/main/apps/social-service)
+
+[notification-service](https://github.com/stasiska/stasbookrepo/tree/main/apps/notification-service)
 
 ```bash
 $ npm install
