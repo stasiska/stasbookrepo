@@ -1,6 +1,9 @@
 <h1> stasbook </h1>
+
 ## Description
+
 This project was created to explore microservice architecture and design practices. The project is built using Nestjs.
+
 ## Project setup
 
 # expamle .env
