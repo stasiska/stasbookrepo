@@ -20,6 +20,7 @@
 - **ORM**: DRIZZLE, PRISMA.
 - **Logger**: Pino.
 - **Metrics**: Grafana, Prometeus.
+- **Object Storage**: S3
 
 ```bash
 $ npm install
