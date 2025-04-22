@@ -6,8 +6,6 @@ This project was created to explore microservice architecture and design practic
 
 ## Project setup
 
-# expamle .env
-
 <a href="https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png"><strong>Explore the docs »</strong></a>
 
 # design
@@ -28,7 +26,7 @@ This project was created to explore microservice architecture and design practic
 - **Containerization**: Docker, docker-compose.
 ## Setup project
 
-# ENV
+# ENV exaple
 
 [api-gateway](https://github.com/stasiska/stasbookrepo/tree/main/apps/api-gateway)
 
