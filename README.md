@@ -9,7 +9,7 @@
 
 # design
 
-![System Design] (https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png)
+![System Design](https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png?raw=true)
 
 
 ## Tech Stack
