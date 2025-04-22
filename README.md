@@ -7,6 +7,10 @@
 
 <a href="https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png"><strong>Explore the docs »</strong></a>
 
+# design
+
+![System Design] (https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png)
+
 ```bash
 $ npm install
 ```
