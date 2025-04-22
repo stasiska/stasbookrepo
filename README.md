@@ -11,6 +11,16 @@
 
 ![System Design](https://github.com/stasiska/stasbookrepo/blob/main/nestjsmicroservice.png?raw=true)
 
+
+## Tech Stack
+
+- **Framework**: Nodejs, Nestjs. 
+- **DB**: Postgres, Redis.
+- **Transport Protocols**: Grpc, RabbitMq.
+- **ORM**: DRIZZLE, PRISMA.
+- **Logger**: Pino.
+- **Metrics**: Grafana, Prometeus.
+
 ```bash
 $ npm install
 ```
@@ -63,11 +73,6 @@ $ npm run start
 $ npm run start:dev
 
 ```
-
-## Tech Stack
-
-**NestJS**: Framework for building .
-
 
 ## Stay in touch
 
