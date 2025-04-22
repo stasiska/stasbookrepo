@@ -16,11 +16,13 @@
 
 - **Framework**: Nodejs, Nestjs. 
 - **DB**: Postgres, Redis.
-- **Transport Protocols**: Grpc, RabbitMq.
+- **Transport Protocols**: Grpc, protobuff, RabbitMq.
 - **ORM**: DRIZZLE, PRISMA.
 - **Logger**: Pino.
 - **Metrics**: Grafana, Prometeus.
 - **Object Storage**: S3
+
+## Setup project
 
 ```bash
 $ npm install
